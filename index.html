@@ -643,6 +643,36 @@
   .indicator-name-group {
     width: 200px;
     flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  .indicator-name-group:hover .indicator-name {
+    color: var(--teal-mid);
+  }
+
+  .indicator-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+    opacity: 0;
+  }
+
+  .indicator-detail.visible {
+    max-height: 200px;
+    opacity: 1;
+  }
+
+  .indicator-detail-inner {
+    padding: 10px 16px 14px;
+    margin: 4px 0 6px 0;
+    background: var(--bg);
+  }
+
+  .indicator-detail-text {
+    font-family: Georgia, serif;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.55;
   }
 
   .indicator-slider-wrap {
@@ -1171,13 +1201,20 @@ const ANCHORS = [
 
 // ── INDICATOR_VALUES_START ──
 const INDICATORS = [
-  { key: 'problemDef',     name: 'Problem Definition',  value: 2.0, sub: 'Convergence on what "the AI problem" is' },
-  { key: 'eliteConsensus', name: 'Elite Consensus',      value: 2.5, sub: 'Policymaker & researcher alignment' },
-  { key: 'publicAware',    name: 'Public Awareness',     value: 4.0, sub: 'General public concern about AI' },
-  { key: 'publicOrg',      name: 'Public Organization',  value: 2.0, sub: 'Whether concern is organized' },
-  { key: 'opposition',     name: 'Opposition Strength',  value: 5.0, sub: 'Industry lobbying & coordination' },
-  { key: 'policyWindows',  name: 'Policy Windows',       value: 2.5, sub: 'Proximity to actionable moments' },
-  { key: 'evidenceBase',   name: 'Evidence Base',         value: 2.5, sub: 'AI governance comms research' },
+  { key: 'problemDef',     name: 'Problem Definition',  value: 2.0, sub: 'Convergence on what "the AI problem" is',
+    detail: 'How well-defined and agreed-upon the core policy problem is. When experts, advocates, and policymakers mean different things by "AI risk"\u200a\u2014\u200ajob displacement vs. existential risk vs. bias vs. concentration of power\u200a\u2014\u200ait\u2019s hard to build coherent communications. Low scores mean messaging must do more foundational work to establish shared frames before deploying specific asks.' },
+  { key: 'evidenceBase',   name: 'Evidence Base',         value: 2.5, sub: 'AI governance comms research',
+    detail: 'The depth and quality of research specific to AI governance communications\u200a\u2014\u200amessage testing, audience segmentation, narrative effectiveness studies. Distinct from general AI research. A weak evidence base means the field is making strategic bets without data, which is why Research & Evidence gets the highest allocation at current levels.' },
+  { key: 'publicAware',    name: 'Public Awareness',     value: 4.0, sub: 'General public concern about AI',
+    detail: 'How much the general public is paying attention to and concerned about AI. Currently high\u200a\u2014\u200amost Americans express concern\u200a\u2014\u200abut awareness alone doesn\u2019t drive policy. The gap between this indicator and Public Organization is the central challenge: concern exists but isn\u2019t yet organized into political power.' },
+  { key: 'publicOrg',      name: 'Public Organization',  value: 2.0, sub: 'Whether concern is organized',
+    detail: 'Whether public concern has translated into organized constituencies, coalitions, or advocacy groups that can exert sustained political pressure. The wide gap between Public Awareness (4.0) and Public Organization (2.0) represents the field\u2019s biggest conversion challenge\u200a\u2014\u200aand the strongest argument for investing in Constituency Building.' },
+  { key: 'opposition',     name: 'Opposition Strength',  value: 5.0, sub: 'Industry lobbying & coordination',
+    detail: 'The intensity and coordination of industry opposition to AI governance. At 5.0, this reflects $100M+ in lobbying and a sophisticated counter-narrative apparatus. Inverted in the composite score\u200a\u2014\u200astrong opposition signals a less mature field, pulling allocations toward foundational investment rather than direct engagement where you\u2019d be outspent.' },
+  { key: 'eliteConsensus', name: 'Elite Consensus',      value: 2.5, sub: 'Policymaker & researcher alignment',
+    detail: 'The degree of alignment among policymakers, researchers, and opinion leaders on what should be done. High consensus enables targeted advocacy; low consensus means resources are better spent building shared understanding and identifying common ground across ideological lines.' },
+  { key: 'policyWindows',  name: 'Policy Windows',       value: 2.5, sub: 'Proximity to actionable moments',
+    detail: 'How close the field is to moments where policy action becomes possible\u200a\u2014\u200aelections, crises, legislative calendars, regulatory proceedings. Low scores mean major federal action is likely 3\u20135 years out, favoring infrastructure investment. But rapid response capacity must be pre-positioned before windows open, not built afterward.' },
 ];
 // ── INDICATOR_VALUES_END ──
 
@@ -1759,6 +1796,21 @@ function updateOutliers() {
   });
 }
 
+let expandedIndicator = -1;
+
+function toggleIndicatorDetail(index) {
+  const details = document.querySelectorAll('.indicator-detail');
+  if (expandedIndicator === index) {
+    details[index].classList.remove('visible');
+    expandedIndicator = -1;
+    return;
+  }
+  details.forEach((d, i) => {
+    d.classList.toggle('visible', i === index);
+  });
+  expandedIndicator = index;
+}
+
 function initIndicators() {
   const grid = document.getElementById('indicatorsGrid');
 
@@ -1768,6 +1820,7 @@ function initIndicators() {
 
     const nameGroup = document.createElement('div');
     nameGroup.className = 'indicator-name-group';
+    nameGroup.addEventListener('click', () => toggleIndicatorDetail(i));
 
     const nameEl = document.createElement('div');
     nameEl.className = 'indicator-name';
@@ -1791,7 +1844,7 @@ function initIndicators() {
     input.type = 'range';
     input.min = '1';
     input.max = '5';
-    input.step = '0.5';
+    input.step = '0.1';
     input.value = ind.value;
     input.dataset.index = i;
 
@@ -1824,6 +1877,12 @@ function initIndicators() {
     }
 
     grid.appendChild(row);
+
+    // Expandable detail panel
+    const detail = document.createElement('div');
+    detail.className = 'indicator-detail';
+    detail.innerHTML = `<div class="indicator-detail-inner"><div class="indicator-detail-text">${ind.detail}</div></div>`;
+    grid.appendChild(detail);
   });
 }
 
