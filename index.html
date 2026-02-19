@@ -1,0 +1,1914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Governance Communications Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-deep: #064d49;
+    --teal-mid: #0a7a6e;
+    --bg: #fdfdf8;
+    --card: #ffffff;
+    --text-1: #1a1a1a;
+    --text-2: #555;
+    --text-3: #888;
+    --border: #c2ccc9;
+    --track-bg: #f0efeb;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    font-family: Georgia, 'Times New Roman', serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .dashboard {
+    background: var(--card);
+    border-radius: 0;
+    padding: 48px 56px 40px;
+    max-width: 920px;
+    width: 100%;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    margin-bottom: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header-content {
+    position: relative;
+    z-index: 1;
+  }
+
+  .header h1 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 32px;
+    font-weight: 400;
+    color: var(--text-1);
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-3);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* ── Section Eyebrow / Conclusion ── */
+  .section-eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-3);
+    margin-bottom: 4px;
+    text-align: center;
+  }
+
+  .section-conclusion {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text-1);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .intro-text {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: var(--text-2);
+    line-height: 1.6;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 32px;
+  }
+
+  /* ── Main Viz: Donut + Legend ── */
+  .main-viz {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    margin-bottom: 44px;
+  }
+
+  .donut-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    flex-shrink: 0;
+  }
+
+  .donut-wrapper svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .center-info {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: none;
+    width: 120px;
+  }
+
+  .center-score {
+    font-family: 'Inter', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--text-1);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+  }
+
+  .center-phase {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-3);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .center-exploring {
+    font-family: Georgia, serif;
+    font-size: 9px;
+    font-style: italic;
+    color: var(--teal-mid);
+    margin-top: 2px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+
+  .center-exploring.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    padding: 6px 8px;
+    margin: -6px -8px;
+    border-radius: 0;
+    transition: background 0.15s ease;
+  }
+
+  .legend-item:hover {
+    background: rgba(0,0,0,0.025);
+  }
+
+  .legend-item.active {
+    background: rgba(0,0,0,0.04);
+  }
+
+  .legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .legend-info {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .legend-name {
+    font-family: Georgia, serif;
+    font-size: 15px;
+    color: var(--text-2);
+  }
+
+  .legend-subtitle {
+    display: block;
+    font-size: 11px;
+    color: var(--text-3);
+    font-style: italic;
+    font-weight: 400;
+    margin-top: 2px;
+  }
+
+  .legend-pct {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-1);
+    min-width: 56px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Category Detail Panel ── */
+  .category-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, margin 0.35s ease;
+    opacity: 0;
+    margin-bottom: 0;
+  }
+
+  .category-detail.visible {
+    max-height: 200px;
+    opacity: 1;
+    margin-bottom: 44px;
+  }
+
+  .category-detail-inner {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 24px;
+    border-radius: 0;
+  }
+
+  .category-detail-content {
+    flex: 1;
+  }
+
+  .category-detail-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-1);
+    margin-bottom: 6px;
+  }
+
+  .category-detail-desc {
+    font-family: Georgia, serif;
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.55;
+    margin-bottom: 8px;
+  }
+
+  .category-detail-items {
+    font-family: Georgia, serif;
+    font-size: 13px;
+    color: var(--text-3);
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* ── Strategic Direction ── */
+  .direction-section {
+    margin-bottom: 0;
+    padding-top: 40px;
+    padding-bottom: 0;
+    border-top: 1px solid var(--border);
+    margin-left: -56px;
+    margin-right: -56px;
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  .direction-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .direction-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px;
+    border-radius: 0;
+    background: var(--bg);
+    border: 1px solid transparent;
+  }
+
+  .direction-option.selected {
+    background: rgba(6, 77, 73, 0.06);
+    border-color: var(--teal-deep);
+  }
+
+  .direction-option.selected-secondary {
+    background: rgba(6, 77, 73, 0.03);
+    border-color: rgba(6, 77, 73, 0.3);
+  }
+
+  .direction-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-3);
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .direction-option.selected .direction-label,
+  .direction-option.selected-secondary .direction-label {
+    color: var(--teal-deep);
+  }
+
+  .direction-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-1);
+  }
+
+  .direction-desc {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    color: var(--text-3);
+    margin-top: 1px;
+  }
+
+  .direction-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: white;
+    background: var(--teal-deep);
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .direction-tag.secondary {
+    background: transparent;
+    color: var(--teal-deep);
+    border: 1px solid var(--teal-deep);
+    border-radius: 2px;
+  }
+
+  .direction-rationale {
+    font-family: Georgia, serif;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.6;
+    font-style: italic;
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+
+
+  /* ── Scrubber Section (Dark Teal) ── */
+  .scrubber-section {
+    margin-left: -56px;
+    margin-right: -56px;
+    margin-bottom: 40px;
+    padding: 36px 56px 32px;
+    background: var(--teal-deep);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scrubber-section > *:not(.dark-dots-svg) {
+    position: relative;
+    z-index: 1;
+  }
+
+  .dark-dots-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .scrubber-section .section-eyebrow {
+    color: rgba(255,255,255,0.45);
+  }
+
+  .scrubber-section .section-conclusion {
+    color: #ffffff;
+  }
+
+  .scrubber-container {
+    position: relative;
+    padding-top: 36px;
+    padding-bottom: 8px;
+  }
+
+  .scrubber-track {
+    position: relative;
+    height: 44px;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    cursor: pointer;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.15);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .phase-region {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: filter 0.2s ease;
+  }
+
+  .phase-region:not(:last-child) {
+    border-right: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .phase-region[data-phase="1"] { background: rgba(255,255,255,0.06); }
+  .phase-region[data-phase="2"] { background: rgba(255,255,255,0.12); }
+  .phase-region[data-phase="3"] { background: rgba(255,255,255,0.06); }
+  .phase-region[data-phase="4"] { background: rgba(255,255,255,0.12); }
+
+  .phase-region-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.50);
+    line-height: 1.3;
+    text-align: center;
+    user-select: none;
+  }
+
+  .phase-region-name {
+    font-family: Georgia, serif;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 1px;
+    user-select: none;
+  }
+
+  /* Pin */
+  .scrubber-pin {
+    position: absolute;
+    top: 0;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    cursor: pointer;
+    transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .pin-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #ffffff;
+    white-space: nowrap;
+    margin-bottom: 2px;
+  }
+
+  .pin-stem {
+    width: 2px;
+    height: 12px;
+    background: #ffffff;
+    border-radius: 0;
+  }
+
+  .pin-dot {
+    width: 10px;
+    height: 10px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 2px solid var(--teal-deep);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    margin-top: -1px;
+  }
+
+  /* Draggable Handle */
+  .scrubber-handle {
+    position: absolute;
+    top: 36px;
+    width: 22px;
+    height: 44px;
+    transform: translateX(-50%);
+    z-index: 20;
+    cursor: grab;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scrubber-handle:active { cursor: grabbing; }
+
+  .handle-visual {
+    width: 22px;
+    height: 30px;
+    background: white;
+    border-radius: 2px;
+    box-shadow:
+      0 1px 3px rgba(0,0,0,0.2),
+      0 4px 12px rgba(0,0,0,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .scrubber-handle:hover .handle-visual {
+    box-shadow:
+      0 2px 6px rgba(0,0,0,0.25),
+      0 6px 16px rgba(0,0,0,0.15);
+    transform: scaleY(1.05);
+  }
+
+  .handle-grip {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .handle-grip span {
+    display: block;
+    width: 8px;
+    height: 1.5px;
+    background: var(--teal-deep);
+    border-radius: 1px;
+  }
+
+  .scrubber-handle.no-transition {
+    transition: none !important;
+  }
+
+  .scrubber-handle:not(.no-transition) {
+    transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Score ticks */
+  .scrubber-ticks {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0 0;
+    position: relative;
+  }
+
+  .tick-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    width: 20px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Indicators Section ── */
+  .indicators-section {
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .indicators-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .indicator-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .indicator-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--text-2);
+  }
+
+  .indicator-subtitle {
+    font-family: Georgia, serif;
+    font-size: 11px;
+    color: var(--text-3);
+    font-style: italic;
+    margin-top: 1px;
+    line-height: 1.3;
+  }
+
+  .indicator-name-group {
+    width: 200px;
+    flex-shrink: 0;
+  }
+
+  .indicator-slider-wrap {
+    width: 240px;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Custom range input */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 0;
+    background: var(--track-bg);
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #064d49;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    box-shadow: 0 1px 6px rgba(0,0,0,0.18);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #064d49;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+    cursor: pointer;
+  }
+
+  input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 0;
+    background: var(--track-bg);
+    border: none;
+  }
+
+  .indicator-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    width: 36px;
+    text-align: right;
+    flex-shrink: 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2);
+    transition: color 0.2s ease, font-size 0.2s ease;
+  }
+
+  .indicator-link {
+    font-family: Georgia, serif;
+    font-size: 11px;
+    font-style: italic;
+    color: #0a7a6e;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── Methodology ── */
+  .methodology-section {
+    margin-bottom: 0;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    border-top: 1px solid var(--border);
+    margin-left: -56px;
+    margin-right: -56px;
+    padding-left: 56px;
+    padding-right: 56px;
+    background: #f5f5f1;
+  }
+
+  .methodology-section .section-eyebrow {
+    text-align: center;
+    font-size: 9px;
+    color: var(--text-3);
+  }
+
+  .methodology-content {
+    padding: 16px 20px;
+    margin-top: 10px;
+    background: transparent;
+  }
+
+  .meth-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-2);
+    margin-bottom: 12px;
+  }
+
+  .meth-table {
+    margin-bottom: 16px;
+  }
+
+  .meth-row {
+    display: flex;
+    align-items: baseline;
+    padding: 5px 0;
+    padding-left: 24px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .meth-row .meth-cat {
+    width: 180px;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
+    color: var(--text-2);
+  }
+
+  .meth-row .meth-arrow {
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--text-3);
+    font-family: Georgia, serif;
+  }
+
+  .meth-row .meth-ind {
+    width: 180px;
+    flex-shrink: 0;
+    font-family: Georgia, serif;
+    color: var(--text-2);
+  }
+
+  .meth-row .meth-score-arrow {
+    width: 20px;
+    flex-shrink: 0;
+    text-align: center;
+    color: var(--text-3);
+    font-family: Georgia, serif;
+  }
+
+  .meth-row .meth-blended {
+    width: 48px;
+    flex-shrink: 0;
+    text-align: right;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-1);
+  }
+
+  .meth-composite-table {
+    margin-bottom: 16px;
+    padding-left: 24px;
+  }
+
+  .meth-composite-row {
+    padding: 2px 0;
+    padding-left: 0;
+  }
+
+  .meth-composite-name {
+    font-family: Georgia, serif;
+    font-size: 11px;
+    color: var(--text-3);
+    flex: 1;
+  }
+
+  .meth-composite-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-2);
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .meth-formula {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.6;
+    margin-bottom: 4px;
+  }
+
+  .meth-formula strong {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .meth-note {
+    font-family: Georgia, serif;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-3);
+    line-height: 1.5;
+    margin-top: 12px;
+  }
+
+  /* ── Key Assumptions ── */
+  .assumptions-section {
+    margin-bottom: 0;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border-top: 1px solid var(--border);
+    margin-left: -56px;
+    margin-right: -56px;
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  .assumptions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .assumption-item {
+    padding: 12px 16px;
+    background: var(--bg);
+    border-radius: 0;
+  }
+
+  .assumption-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-1);
+    line-height: 1.4;
+  }
+
+  .assumption-if {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    color: var(--text-3);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 0;
+    padding-top: 24px;
+    padding-bottom: 8px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    margin-left: -56px;
+    margin-right: -56px;
+    padding-left: 56px;
+    padding-right: 56px;
+  }
+
+  .footer p {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 760px) {
+    .dashboard { padding: 32px 28px 28px; }
+    .main-viz { flex-direction: column; gap: 28px; }
+    .donut-wrapper { width: 240px; height: 240px; margin: 0 auto; }
+    .indicator-name { width: 140px; font-size: 10px; }
+    .header h1 { font-size: 24px; }
+    .meth-row .meth-cat { width: 140px; }
+    .scrubber-section,
+    .direction-section,
+    .methodology-section,
+    .assumptions-section,
+    .footer {
+      margin-left: -28px;
+      margin-right: -28px;
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+    .scrubber-section {
+      padding-top: 32px;
+      padding-bottom: 28px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+  <div class="header">
+    <div class="header-content">
+      <h1>AI Governance Communications Portfolio</h1>
+      <div class="subtitle">February 2026</div>
+    </div>
+  </div>
+
+  <p class="intro-text">A portfolio model for allocating strategic communications resources across AI governance. Allocations shift based on where the field currently stands — adjust the indicators to explore how.</p>
+
+  <div class="main-viz">
+    <div class="donut-wrapper">
+      <svg id="donut" viewBox="0 0 300 300"></svg>
+      <div class="center-info">
+        <div class="center-score" id="centerScore">2.4</div>
+        <div class="center-phase" id="centerPhase">Early<br>Infrastructure</div>
+        <div class="center-exploring" id="centerExploring">exploring</div>
+      </div>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <div class="category-detail" id="categoryDetail">
+    <div class="category-detail-inner" id="categoryDetailInner">
+      <div class="category-detail-content">
+        <div class="category-detail-title" id="categoryDetailTitle"></div>
+        <div class="category-detail-desc" id="categoryDetailDesc"></div>
+        <div class="category-detail-items" id="categoryDetailItems"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrubber-section">
+    <svg id="darkDotScatter" class="dark-dots-svg" aria-hidden="true"></svg>
+    <div class="section-eyebrow">Policy Cycle</div>
+    <div class="section-conclusion" id="scrubberConclusion"></div>
+    <div class="scrubber-container" id="scrubberContainer">
+      <div class="scrubber-pin" id="scrubberPin">
+        <div class="pin-label">Current</div>
+        <div class="pin-stem"></div>
+        <div class="pin-dot"></div>
+      </div>
+      <div class="scrubber-track" id="scrubberTrack">
+        <div class="phase-region" data-phase="1">
+          <div class="phase-region-label">Phase 1</div>
+          <div class="phase-region-name">Pre-Formation</div>
+        </div>
+        <div class="phase-region" data-phase="2">
+          <div class="phase-region-label">Phase 2</div>
+          <div class="phase-region-name">Early Infra</div>
+        </div>
+        <div class="phase-region" data-phase="3">
+          <div class="phase-region-label">Phase 3</div>
+          <div class="phase-region-name">Contested</div>
+        </div>
+        <div class="phase-region" data-phase="4">
+          <div class="phase-region-label">Phase 4</div>
+          <div class="phase-region-name">Policy Window</div>
+        </div>
+      </div>
+      <div class="scrubber-handle" id="scrubberHandle">
+        <div class="handle-visual">
+          <div class="handle-grip"><span></span><span></span><span></span></div>
+        </div>
+      </div>
+      <div class="scrubber-ticks">
+        <span class="tick-label">1</span>
+        <span class="tick-label">2</span>
+        <span class="tick-label">3</span>
+        <span class="tick-label">4</span>
+        <span class="tick-label">5</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="indicators-section">
+    <div class="section-eyebrow">Field Indicators</div>
+    <div class="section-conclusion" id="indicatorConclusion"></div>
+    <div class="indicators-grid" id="indicatorsGrid"></div>
+  </div>
+
+  <div class="direction-section">
+    <div class="section-eyebrow">Strategic Direction</div>
+    <div class="section-conclusion">This framework optimizes for durable policy infrastructure with secondary crisis preparedness</div>
+
+    <div class="direction-options">
+      <div class="direction-option">
+        <span class="direction-label">A</span>
+        <div class="direction-text">
+          <div class="direction-name">Pass specific legislation</div>
+          <div class="direction-desc">Heavy elite engagement, rapid response</div>
+        </div>
+      </div>
+      <div class="direction-option selected">
+        <span class="direction-label">B</span>
+        <div class="direction-text">
+          <div class="direction-name">Build durable policy infrastructure</div>
+          <div class="direction-desc">Heavy constituency building, narrative infrastructure</div>
+        </div>
+        <span class="direction-tag">Primary</span>
+      </div>
+      <div class="direction-option">
+        <span class="direction-label">C</span>
+        <div class="direction-text">
+          <div class="direction-name">Shift Overton window</div>
+          <div class="direction-desc">Heavy narrative infrastructure, public understanding</div>
+        </div>
+      </div>
+      <div class="direction-option selected-secondary">
+        <span class="direction-label">D</span>
+        <div class="direction-text">
+          <div class="direction-name">Crisis preparedness</div>
+          <div class="direction-desc">Heavy rapid response, pre-positioned materials</div>
+        </div>
+        <span class="direction-tag secondary">Secondary</span>
+      </div>
+      <div class="direction-option">
+        <span class="direction-label">E</span>
+        <div class="direction-text">
+          <div class="direction-name">Build evidence base</div>
+          <div class="direction-desc">Heavy research & evidence</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="direction-rationale">CG's theory of change (Visibility &rarr; Safeguards &rarr; Capacity Building) and apparent caution around direct advocacy funding make infrastructure their comparative advantage. The uncertain timeline for transformative AI suggests preparing for multiple scenarios rather than optimizing for near-term wins.</p>
+  </div>
+
+  <div class="assumptions-section">
+    <div class="section-eyebrow">Key Assumptions</div>
+    <div class="assumptions-list">
+      <div class="assumption-item">
+        <div class="assumption-text">CG's goal is durable infrastructure, not near-term legislative wins</div>
+        <div class="assumption-if">If goal shifts to legislation → increase Constituency Building and Rapid Response</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-text">The policy window is 3-5 years out for major federal action</div>
+        <div class="assumption-if">If window opens sooner → surge campaign-level rapid response through existing infrastructure (infrastructure must be pre-positioned)</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-text">Opposition will remain strong ($100M+ in industry lobbying)</div>
+        <div class="assumption-if">If opposition weakens → reduce Rapid Response, increase direct engagement</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-text">Problem definition will remain contested</div>
+        <div class="assumption-if">If consensus emerges → reduce Research, increase deployment categories</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-text">CG exercises caution around funding direct advocacy (C3 status unconfirmed)</div>
+        <div class="assumption-if">If CG has more latitude than assumed → increase Constituency Building and Advocacy Comms Support</div>
+      </div>
+      <div class="assumption-item">
+        <div class="assumption-text">Other funders are not filling the gaps in narrative infrastructure</div>
+        <div class="assumption-if">If other funders invest heavily → CG can shift to other priorities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="methodology-section">
+    <div class="section-eyebrow">Methodology</div>
+    <div class="methodology-content" id="methodologyContent"></div>
+  </div>
+
+  <div class="footer">
+    <p>Portfolio model &middot; Updated February 2026</p>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+
+const CATEGORIES = [
+  {
+    key: 'research', name: 'Research & Evidence', color: '#01231f',
+    subtitle: 'Polling, message testing, audience research',
+    driver: 'Evidence Base',
+    desc: 'The foundation everything else builds on. Understand the landscape before deploying.',
+    items: 'Polling, message testing, audience segmentation, effectiveness research, academic studies'
+  },
+  {
+    key: 'narrative', name: 'Narrative Infrastructure', color: '#064d49',
+    subtitle: 'Messaging frameworks, spokespeople, content capacity',
+    driver: 'Problem Definition',
+    desc: 'Force multipliers for the whole field. Messaging frameworks and coordination capacity that make every other dollar more effective.',
+    items: 'Central comms hub, messaging frameworks, content production, style guides, rapid response playbooks'
+  },
+  {
+    key: 'rapid', name: 'Rapid Response', color: '#1a9080',
+    subtitle: 'Crisis playbooks, monitoring, surge capacity',
+    driver: 'Policy Windows',
+    desc: 'Surge capacity for when windows open. You can\'t build this after a crisis hits.',
+    items: 'Crisis playbooks, monitoring systems, pre-positioned asks, coordination infrastructure, surge capacity'
+  },
+  {
+    key: 'constituency', name: 'Constituency Building', color: '#50bca8',
+    subtitle: 'Coalitions, validators, organized voices',
+    driver: 'Public Organization',
+    desc: 'Turning diffuse public concern into organized political power. Slow to build, durable once it exists.',
+    items: 'Coalition support, validator networks, bipartisan bridge-building, organized voice development'
+  },
+  {
+    key: 'advocacy', name: 'Advocacy Comms Support', color: '#94d6cc',
+    subtitle: 'Partner comms training, shared infrastructure',
+    driver: 'Public Awareness',
+    desc: 'Build the comms capacity of organizations already doing the engaging. Not lobbying\u2014partner infrastructure.',
+    items: 'Media training for advocacy orgs, comms consulting, rapid-response materials, shared infrastructure'
+  },
+];
+
+// Anchor points: [Research, Narrative, Rapid, Constituency, Advocacy]
+const ANCHORS = [
+  { score: 1.5, allocs: [40, 25, 20, 10,  5] },
+  { score: 2.5, allocs: [25, 25, 20, 15, 15] },
+  { score: 3.5, allocs: [15, 15, 20, 30, 20] },
+  { score: 4.5, allocs: [10, 10, 25, 30, 25] },
+  { score: 5.0, allocs: [20, 20, 20, 25, 15] },
+];
+
+// ── INDICATOR_VALUES_START ──
+const INDICATORS = [
+  { key: 'problemDef',     name: 'Problem Definition',  value: 2.0, sub: 'Convergence on what "the AI problem" is' },
+  { key: 'eliteConsensus', name: 'Elite Consensus',      value: 2.5, sub: 'Policymaker & researcher alignment' },
+  { key: 'publicAware',    name: 'Public Awareness',     value: 4.0, sub: 'General public concern about AI' },
+  { key: 'publicOrg',      name: 'Public Organization',  value: 2.0, sub: 'Whether concern is organized' },
+  { key: 'opposition',     name: 'Opposition Strength',  value: 5.0, sub: 'Industry lobbying & coordination' },
+  { key: 'policyWindows',  name: 'Policy Windows',       value: 2.5, sub: 'Proximity to actionable moments' },
+  { key: 'evidenceBase',   name: 'Evidence Base',         value: 2.5, sub: 'AI governance comms research' },
+];
+// ── INDICATOR_VALUES_END ──
+
+// ── Category-linked indicator weighting ──
+const CATEGORY_LINKS = [
+  { category: 'research',     indicator: 'evidenceBase',   label: 'Evidence Base' },
+  { category: 'narrative',    indicator: 'problemDef',     label: 'Problem Definition' },
+  { category: 'rapid',        indicator: 'policyWindows',  label: 'Policy Windows' },
+  { category: 'constituency', indicator: 'publicOrg',      label: 'Public Organization' },
+  { category: 'advocacy',     indicator: 'publicAware',    label: 'Public Awareness' },
+];
+
+const BLEND_RATIO = 0.5;
+const INVERTED_INDICATORS = ['opposition'];
+
+const INDICATOR_LINK_LABELS = {
+  evidenceBase:  { text: '\u2192 drives Research & Evidence',      color: '#0a7a6e' },
+  problemDef:    { text: '\u2192 drives Narrative Infrastructure', color: '#0a7a6e' },
+  policyWindows: { text: '\u2192 drives Rapid Response',           color: '#0a7a6e' },
+  publicOrg:     { text: '\u2192 drives Constituency Building',    color: '#0a7a6e' },
+  publicAware:   { text: '\u2192 drives Advocacy Comms Support',   color: '#0a7a6e' },
+};
+
+const PHASES = [
+  { min: 1, max: 2, name: 'Pre-Formation',       shortName: 'Pre-Formation' },
+  { min: 2, max: 3, name: 'Early Infrastructure', shortName: 'Early\nInfrastructure' },
+  { min: 3, max: 4, name: 'Contested Terrain',    shortName: 'Contested\nTerrain' },
+  { min: 4, max: 5, name: 'Policy Window',        shortName: 'Policy\nWindow' },
+  { min: 5, max: 6, name: 'Maintenance',          shortName: 'Maintenance' },
+];
+
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+
+let state = {
+  indicators: INDICATORS.map(i => i.value),
+  compositeScore: 0,
+  initialScore: 0,
+  exploringScore: 0,
+  displayScore: 0,
+  displayAllocations: [25, 25, 20, 15, 15],
+  isDragging: false,
+  animationId: null,
+  selectedCategory: -1,
+};
+
+
+// ═══════════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════════
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+function clamp(v, min, max) { return Math.min(Math.max(v, min), max); }
+
+function polarToXY(cx, cy, r, degrees) {
+  const rad = (degrees - 90) * Math.PI / 180;
+  return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+}
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
+function scoreToPercent(score) {
+  return ((score - 1) / 4) * 100;
+}
+
+function percentToScore(pct) {
+  return 1 + (pct / 100) * 4;
+}
+
+function getPhaseInfo(score) {
+  if (score < 2) return PHASES[0];
+  if (score < 3) return PHASES[1];
+  if (score < 4) return PHASES[2];
+  if (score < 5) return PHASES[3];
+  return PHASES[4];
+}
+
+function getValueClass(v) {
+  if (v <= 2) return 'low';
+  if (v <= 3) return 'mid';
+  return 'high';
+}
+
+function getValueClassForIndicator(v, key) {
+  if (INVERTED_INDICATORS.includes(key)) {
+    const inverted = 6.0 - v;
+    return getValueClass(inverted);
+  }
+  return getValueClass(v);
+}
+
+
+// ═══════════════════════════════════════════════════════
+// ALLOCATION INTERPOLATION (with inversion + blending)
+// ═══════════════════════════════════════════════════════
+
+function getAllocationsAtScore(score) {
+  const s = clamp(score, 1, 5);
+
+  if (s <= ANCHORS[0].score) return [...ANCHORS[0].allocs];
+  if (s >= ANCHORS[ANCHORS.length - 1].score) return [...ANCHORS[ANCHORS.length - 1].allocs];
+
+  for (let i = 0; i < ANCHORS.length - 1; i++) {
+    if (s >= ANCHORS[i].score && s <= ANCHORS[i + 1].score) {
+      const t = (s - ANCHORS[i].score) / (ANCHORS[i + 1].score - ANCHORS[i].score);
+      return ANCHORS[i].allocs.map((v, j) =>
+        v + (ANCHORS[i + 1].allocs[j] - v) * t
+      );
+    }
+  }
+  return [...ANCHORS[0].allocs];
+}
+
+function computeComposite() {
+  const values = state.indicators.map((v, i) => {
+    const key = INDICATORS[i].key;
+    return INVERTED_INDICATORS.includes(key) ? (6.0 - v) : v;
+  });
+  return Math.round((values.reduce((a, b) => a + b, 0) / values.length) * 100) / 100;
+}
+
+function getBlendedScores(composite) {
+  return CATEGORY_LINKS.map(link => {
+    const indicatorIndex = INDICATORS.findIndex(ind => ind.key === link.indicator);
+    const indicatorValue = state.indicators[indicatorIndex];
+    return composite * (1 - BLEND_RATIO) + indicatorValue * BLEND_RATIO;
+  });
+}
+
+function getBlendedAllocations(composite) {
+  const blendedScores = getBlendedScores(composite);
+
+  const rawAllocations = blendedScores.map((score, i) => {
+    const allAtScore = getAllocationsAtScore(score);
+    return allAtScore[i];
+  });
+
+  const total = rawAllocations.reduce((a, b) => a + b, 0);
+  return rawAllocations.map(v => (v / total) * 100);
+}
+
+
+// ═══════════════════════════════════════════════════════
+// DONUT CHART
+// ═══════════════════════════════════════════════════════
+
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const CX = 150, CY = 150, OUTER_R = 132, INNER_R = 82;
+const GAP_DEG = 2.5;
+
+let slicePaths = [];
+let sliceMidAngles = [];
+
+function initDonut() {
+  const svg = document.getElementById('donut');
+  CATEGORIES.forEach((cat, i) => {
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('fill', cat.color);
+    path.style.transition = 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+    path.style.cursor = 'pointer';
+    path.addEventListener('click', () => selectCategory(i));
+    svg.appendChild(path);
+    slicePaths.push(path);
+    sliceMidAngles.push(0);
+  });
+}
+
+function renderDonut(allocations) {
+  const totalGap = GAP_DEG * CATEGORIES.length;
+  const usableDeg = 360 - totalGap;
+  let angle = 0;
+
+  allocations.forEach((pct, i) => {
+    const sliceDeg = (pct / 100) * usableDeg;
+
+    if (sliceDeg < 0.1) {
+      slicePaths[i].setAttribute('d', '');
+      angle += sliceDeg + GAP_DEG;
+      return;
+    }
+
+    const startAngle = angle;
+    const endAngle = angle + sliceDeg;
+    const largeArc = sliceDeg > 180 ? 1 : 0;
+
+    const os = polarToXY(CX, CY, OUTER_R, startAngle);
+    const oe = polarToXY(CX, CY, OUTER_R, endAngle);
+    const ie = polarToXY(CX, CY, INNER_R, endAngle);
+    const is_ = polarToXY(CX, CY, INNER_R, startAngle);
+
+    const d = [
+      `M ${os.x} ${os.y}`,
+      `A ${OUTER_R} ${OUTER_R} 0 ${largeArc} 1 ${oe.x} ${oe.y}`,
+      `L ${ie.x} ${ie.y}`,
+      `A ${INNER_R} ${INNER_R} 0 ${largeArc} 0 ${is_.x} ${is_.y}`,
+      `Z`
+    ].join(' ');
+
+    slicePaths[i].setAttribute('d', d);
+
+    const midAngle = (startAngle + endAngle) / 2;
+    sliceMidAngles[i] = midAngle;
+
+    if (state.selectedCategory === i) {
+      const explodeR = 8;
+      const rad = (midAngle - 90) * Math.PI / 180;
+      const tx = explodeR * Math.cos(rad);
+      const ty = explodeR * Math.sin(rad);
+      slicePaths[i].style.transform = `translate(${tx}px, ${ty}px)`;
+      slicePaths[i].style.filter = 'drop-shadow(0 2px 6px rgba(0,0,0,0.15))';
+    } else {
+      slicePaths[i].style.transform = 'translate(0, 0)';
+      slicePaths[i].style.filter = 'none';
+    }
+
+    angle = endAngle + GAP_DEG;
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════
+// LEGEND
+// ═══════════════════════════════════════════════════════
+
+let legendPctEls = [];
+let legendItems = [];
+
+function initLegend() {
+  const container = document.getElementById('legend');
+  CATEGORIES.forEach((cat, i) => {
+    const item = document.createElement('div');
+    item.className = 'legend-item';
+    item.dataset.index = i;
+    item.addEventListener('click', () => selectCategory(i));
+
+    const pctEl = document.createElement('span');
+    pctEl.className = 'legend-pct';
+
+    item.innerHTML = `
+      <div class="legend-dot" style="background:${cat.color}"></div>
+      <div class="legend-info">
+        <span class="legend-name">${cat.name}<span class="legend-subtitle">${cat.subtitle}</span></span>
+      </div>
+    `;
+    item.querySelector('.legend-info').appendChild(pctEl);
+    container.appendChild(item);
+    legendPctEls.push(pctEl);
+    legendItems.push(item);
+  });
+}
+
+function updateLegend(allocations) {
+  allocations.forEach((pct, i) => {
+    legendPctEls[i].textContent = Math.round(pct) + '%';
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════
+// CATEGORY DETAIL PANEL
+// ═══════════════════════════════════════════════════════
+
+const categoryDetail = document.getElementById('categoryDetail');
+const categoryDetailInner = document.getElementById('categoryDetailInner');
+const categoryDetailTitle = document.getElementById('categoryDetailTitle');
+const categoryDetailDesc = document.getElementById('categoryDetailDesc');
+const categoryDetailItems = document.getElementById('categoryDetailItems');
+
+function selectCategory(index) {
+  if (state.selectedCategory === index) {
+    state.selectedCategory = -1;
+    categoryDetail.classList.remove('visible');
+    legendItems.forEach(item => item.classList.remove('active'));
+    renderDonut(state.displayAllocations);
+    return;
+  }
+
+  state.selectedCategory = index;
+  const cat = CATEGORIES[index];
+
+  categoryDetailTitle.textContent = cat.name;
+  categoryDetailDesc.textContent = cat.desc;
+  categoryDetailItems.textContent = cat.items;
+  categoryDetailInner.style.background = hexToRgba(cat.color, 0.08);
+
+  categoryDetail.classList.add('visible');
+
+  legendItems.forEach((item, i) => {
+    item.classList.toggle('active', i === index);
+  });
+
+  renderDonut(state.displayAllocations);
+}
+
+
+// ═══════════════════════════════════════════════════════
+// CENTER LABEL
+// ═══════════════════════════════════════════════════════
+
+const centerScoreEl = document.getElementById('centerScore');
+const centerPhaseEl = document.getElementById('centerPhase');
+const centerExploringEl = document.getElementById('centerExploring');
+
+function updateCenterLabel(score, exploring) {
+  centerScoreEl.textContent = score.toFixed(1);
+  const phase = getPhaseInfo(score);
+  centerPhaseEl.innerHTML = phase.name.replace(' ', '<br>');
+  if (exploring) {
+    centerExploringEl.classList.add('visible');
+  } else {
+    centerExploringEl.classList.remove('visible');
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// DYNAMIC SECTION TITLES
+// ═══════════════════════════════════════════════════════
+
+function getScrubberConclusion(score) {
+  if (score < 2) return "The field hasn\u2019t formed yet \u2014 invest in understanding before acting";
+  if (score < 3) return "The field is in early infrastructure \u2014 most investment should build foundations";
+  if (score < 4) return "Terrain is contested \u2014 balance foundational work with activation";
+  return "A policy window is opening \u2014 shift toward advocacy and rapid response";
+}
+
+function getIndicatorConclusion() {
+  let maxDev = -1, maxIdx = -1;
+  state.indicators.forEach((v, i) => {
+    const dev = Math.abs(v - 3.0);
+    if (dev > maxDev) { maxDev = dev; maxIdx = i; }
+  });
+  const ind = INDICATORS[maxIdx];
+  const v = state.indicators[maxIdx].toFixed(1);
+  if (ind.key === 'opposition') {
+    return `Opposition dominates at ${v} \u2014 the rest of the field trails behind`;
+  }
+  return `${ind.name} leads at ${v} \u2014 the field\u2019s strongest signal`;
+}
+
+function updateSectionTitles(score) {
+  const scrubberEl = document.getElementById('scrubberConclusion');
+  const indicatorEl = document.getElementById('indicatorConclusion');
+  if (scrubberEl) scrubberEl.textContent = getScrubberConclusion(score);
+  if (indicatorEl) indicatorEl.textContent = getIndicatorConclusion();
+}
+
+
+// ═══════════════════════════════════════════════════════
+// METHODOLOGY PANEL
+// ═══════════════════════════════════════════════════════
+
+const methodologyContent = document.getElementById('methodologyContent');
+
+function initMethodologyPanel() {
+  // Methodology is always visible — no toggle needed
+}
+
+function updateMethodologyPanel(effectiveComposite) {
+  const blendedScores = getBlendedScores(effectiveComposite);
+
+  let rowsHTML = '';
+  CATEGORY_LINKS.forEach((link, i) => {
+    const cat = CATEGORIES.find(c => c.key === link.category);
+    const indicatorIndex = INDICATORS.findIndex(ind => ind.key === link.indicator);
+    const indicatorValue = state.indicators[indicatorIndex];
+    rowsHTML += `
+      <div class="meth-row">
+        <div class="meth-cat">${cat.name}</div>
+        <div class="meth-arrow">\u2190</div>
+        <div class="meth-ind">${link.label} (${indicatorValue.toFixed(1)})</div>
+        <div class="meth-score-arrow">\u2192</div>
+        <div class="meth-blended">${blendedScores[i].toFixed(2)}</div>
+      </div>`;
+  });
+
+  // Build composite breakdown showing all 7 indicators
+  let compositeHTML = '';
+  state.indicators.forEach((v, i) => {
+    const ind = INDICATORS[i];
+    const isInverted = INVERTED_INDICATORS.includes(ind.key);
+    const effective = isInverted ? (6.0 - v) : v;
+    const suffix = isInverted ? ` (inverted: ${v.toFixed(1)} → ${effective.toFixed(1)})` : '';
+    compositeHTML += `
+      <div class="meth-row meth-composite-row">
+        <div class="meth-composite-name">${ind.name}${suffix}</div>
+        <div class="meth-composite-val">${effective.toFixed(1)}</div>
+      </div>`;
+  });
+
+  methodologyContent.innerHTML = `
+    <div class="meth-title">How Allocations Are Calculated</div>
+    <p class="meth-formula">Each category is influenced by a linked field indicator:</p>
+    <div class="meth-table">${rowsHTML}</div>
+    <p class="meth-formula">Blend formula: 50% field composite + 50% linked indicator</p>
+    <p class="meth-formula" style="margin-bottom:8px;">Field composite (average of all 7 indicators): <strong>${effectiveComposite.toFixed(2)}</strong></p>
+    <div class="meth-table meth-composite-table">${compositeHTML}</div>
+    <p class="meth-note">When a linked indicator is low, that category shifts toward earlier-phase levels (more foundational investment). When high, it shifts toward later-phase levels (more activation). Opposition Strength is inverted in the composite \u2014 strong opposition signals a less mature field. Allocations are normalized to sum to 100%.</p>`;
+}
+
+
+// ═══════════════════════════════════════════════════════
+// ANIMATION
+// ═══════════════════════════════════════════════════════
+
+function animateTo(targetAllocs, targetScore, duration, exploring, onComplete) {
+  if (state.animationId) cancelAnimationFrame(state.animationId);
+
+  const startAllocs = [...state.displayAllocations];
+  const startScore = state.displayScore;
+  const startTime = performance.now();
+
+  function tick(now) {
+    const elapsed = now - startTime;
+    const rawT = Math.min(elapsed / duration, 1);
+    const t = easeOutCubic(rawT);
+
+    const interpolated = startAllocs.map((v, i) =>
+      lerp(v, targetAllocs[i], t)
+    );
+    const interpolatedScore = lerp(startScore, targetScore, t);
+
+    state.displayAllocations = interpolated;
+    state.displayScore = interpolatedScore;
+
+    renderDonut(interpolated);
+    updateLegend(interpolated);
+    updateCenterLabel(interpolatedScore, !!exploring);
+
+    if (rawT < 1) {
+      state.animationId = requestAnimationFrame(tick);
+    } else {
+      state.displayAllocations = [...targetAllocs];
+      state.displayScore = targetScore;
+      state.animationId = null;
+      if (onComplete) onComplete();
+    }
+  }
+
+  state.animationId = requestAnimationFrame(tick);
+}
+
+function setImmediate(allocs, score, exploring) {
+  if (state.animationId) cancelAnimationFrame(state.animationId);
+  state.animationId = null;
+  state.displayAllocations = [...allocs];
+  state.displayScore = score;
+  renderDonut(allocs);
+  updateLegend(allocs);
+  updateCenterLabel(score, exploring);
+}
+
+
+// ═══════════════════════════════════════════════════════
+// SCRUBBER
+// ═══════════════════════════════════════════════════════
+
+const scrubberTrack = document.getElementById('scrubberTrack');
+const scrubberHandle = document.getElementById('scrubberHandle');
+const scrubberPin = document.getElementById('scrubberPin');
+
+function updatePinPosition(score) {
+  const pct = scoreToPercent(score);
+  scrubberPin.style.left = pct + '%';
+}
+
+function updateHandlePosition(score, animate) {
+  const pct = scoreToPercent(score);
+  if (!animate) {
+    scrubberHandle.classList.add('no-transition');
+  } else {
+    scrubberHandle.classList.remove('no-transition');
+  }
+  scrubberHandle.style.left = pct + '%';
+  if (!animate) scrubberHandle.offsetHeight;
+}
+
+function getScoreFromPointer(e) {
+  const rect = scrubberTrack.getBoundingClientRect();
+  const x = (e.clientX || e.touches?.[0]?.clientX || 0) - rect.left;
+  const pct = (x / rect.width) * 100;
+  return clamp(percentToScore(pct), 1, 5);
+}
+
+function snapToCurrent() {
+  state.exploringScore = state.initialScore;
+  updateHandlePosition(state.initialScore, true);
+  const allocs = getBlendedAllocations(state.initialScore);
+  animateTo(allocs, state.initialScore, 400);
+  updateMethodologyPanel(state.initialScore);
+  updateSectionTitles(state.initialScore);
+}
+
+function initScrubber() {
+  scrubberPin.addEventListener('click', snapToCurrent);
+
+  scrubberHandle.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    state.isDragging = true;
+    scrubberHandle.setPointerCapture(e.pointerId);
+    scrubberHandle.classList.add('no-transition');
+  });
+
+  scrubberHandle.addEventListener('pointermove', (e) => {
+    if (!state.isDragging) return;
+    const score = getScoreFromPointer(e);
+    updateHandlePosition(score, false);
+    const allocs = getBlendedAllocations(score);
+    setImmediate(allocs, score, true);
+    updateMethodologyPanel(score);
+    updateSectionTitles(score);
+  });
+
+  scrubberHandle.addEventListener('pointerup', (e) => {
+    if (!state.isDragging) return;
+    state.isDragging = false;
+    scrubberHandle.releasePointerCapture(e.pointerId);
+
+    scrubberHandle.classList.remove('no-transition');
+    const score = getScoreFromPointer(e);
+    state.exploringScore = score;
+    const allocs = getBlendedAllocations(score);
+    setImmediate(allocs, score, score !== state.compositeScore);
+    updateMethodologyPanel(score);
+    updateSectionTitles(score);
+  });
+
+  scrubberTrack.addEventListener('click', (e) => {
+    if (state.isDragging) return;
+    const score = getScoreFromPointer(e);
+    state.exploringScore = score;
+    updateHandlePosition(score, true);
+    const allocs = getBlendedAllocations(score);
+    const isExploring = Math.abs(score - state.compositeScore) > 0.05;
+    animateTo(allocs, score, 400, isExploring);
+    updateMethodologyPanel(score);
+    updateSectionTitles(score);
+  });
+}
+
+
+// ═══════════════════════════════════════════════════════
+// INDICATORS
+// ═══════════════════════════════════════════════════════
+
+let indicatorValueEls = [];
+
+function updateSliderFill(input, value) {
+  const pct = ((value - 1) / 4) * 100;
+  input.style.background = `linear-gradient(to right, #064d49 ${pct}%, #f0efeb ${pct}%)`;
+}
+
+function updateOutliers() {
+  let maxDev = -1, maxIdx = -1;
+  state.indicators.forEach((v, i) => {
+    const dev = Math.abs(v - 3.0);
+    if (dev > maxDev) { maxDev = dev; maxIdx = i; }
+  });
+  indicatorValueEls.forEach((el, i) => {
+    if (i === maxIdx) {
+      el.style.color = '#1a1a1a';
+      el.style.fontWeight = '800';
+      el.style.fontSize = '17px';
+    } else {
+      el.style.color = '#555';
+      el.style.fontWeight = '700';
+      el.style.fontSize = '15px';
+    }
+  });
+}
+
+function initIndicators() {
+  const grid = document.getElementById('indicatorsGrid');
+
+  INDICATORS.forEach((ind, i) => {
+    const row = document.createElement('div');
+    row.className = 'indicator-row';
+
+    const nameGroup = document.createElement('div');
+    nameGroup.className = 'indicator-name-group';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'indicator-name';
+    nameEl.textContent = ind.name;
+    nameGroup.appendChild(nameEl);
+
+    if (ind.sub) {
+      const subEl = document.createElement('div');
+      subEl.className = 'indicator-subtitle';
+      subEl.textContent = ind.sub;
+      if (INVERTED_INDICATORS.includes(ind.key)) {
+        subEl.textContent += ' (inverted in composite)';
+      }
+      nameGroup.appendChild(subEl);
+    }
+
+    const sliderWrap = document.createElement('div');
+    sliderWrap.className = 'indicator-slider-wrap';
+
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = '1';
+    input.max = '5';
+    input.step = '0.5';
+    input.value = ind.value;
+    input.dataset.index = i;
+
+    const valueEl = document.createElement('div');
+    valueEl.className = 'indicator-value';
+    valueEl.textContent = ind.value.toFixed(1);
+    indicatorValueEls.push(valueEl);
+
+    updateSliderFill(input, ind.value);
+
+    input.addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      state.indicators[i] = v;
+      valueEl.textContent = v.toFixed(1);
+      updateSliderFill(input, v);
+      onIndicatorsChanged();
+    });
+
+    sliderWrap.appendChild(input);
+    row.appendChild(nameGroup);
+    row.appendChild(sliderWrap);
+    row.appendChild(valueEl);
+
+    const linkInfo = INDICATOR_LINK_LABELS[ind.key];
+    if (linkInfo) {
+      const linkEl = document.createElement('span');
+      linkEl.className = 'indicator-link';
+      linkEl.textContent = linkInfo.text;
+      row.appendChild(linkEl);
+    }
+
+    grid.appendChild(row);
+  });
+}
+
+function onIndicatorsChanged() {
+  const newComposite = computeComposite();
+  state.compositeScore = newComposite;
+  state.exploringScore = newComposite;
+
+  // Pin stays at initial score — only handle moves
+  updateOutliers();
+  updateSectionTitles(newComposite);
+
+  if (!state.isDragging) {
+    updateHandlePosition(newComposite, true);
+    const allocs = getBlendedAllocations(newComposite);
+    animateTo(allocs, newComposite, 400);
+    updateMethodologyPanel(newComposite);
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// DOT SCATTER
+// ═══════════════════════════════════════════════════════
+
+function seededRandom(seed) {
+  let s = seed;
+  return function() {
+    s = (s * 1664525 + 1013904223) & 0xffffffff;
+    return (s >>> 0) / 0xffffffff;
+  };
+}
+
+function initDarkDots() {
+  const svg = document.getElementById('darkDotScatter');
+  if (!svg) return;
+  const rand = seededRandom(99);
+
+  for (let i = 0; i < 30; i++) {
+    const x = rand() * 100;
+    const y = rand() * 100;
+    const r = 2 + rand() * 10;
+    const opacity = 0.03 + rand() * 0.07;
+    const circle = document.createElementNS(SVG_NS, 'circle');
+    circle.setAttribute('cx', x + '%');
+    circle.setAttribute('cy', y + '%');
+    circle.setAttribute('r', r);
+    circle.setAttribute('fill', 'white');
+    circle.setAttribute('opacity', opacity.toFixed(2));
+    svg.appendChild(circle);
+  }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+
+function init() {
+  state.compositeScore = computeComposite();
+  state.initialScore = state.compositeScore;
+  const initialAllocs = getBlendedAllocations(state.compositeScore);
+  state.displayAllocations = [...initialAllocs];
+  state.displayScore = state.compositeScore;
+
+  // Build UI
+  initDarkDots();
+  initDonut();
+  initLegend();
+  initMethodologyPanel();
+  initScrubber();
+  initIndicators();
+
+  // Initial render
+  renderDonut(initialAllocs);
+  updateLegend(initialAllocs);
+  updateCenterLabel(state.compositeScore, false);
+  updatePinPosition(state.initialScore);
+  updateHandlePosition(state.compositeScore, false);
+  updateMethodologyPanel(state.compositeScore);
+  updateOutliers();
+  updateSectionTitles(state.compositeScore);
+}
+
+init();
+</script>
+</body>
+</html>
